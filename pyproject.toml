@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastapi_auth0_code_flow"
+version = "0.0.1"
+authors = [
+  { name="Corey Cothrum", email="contact@coreycothrum.com" },
+]
+description = "FastAPI integration with Auth0 OAuth2 Authorization Code Flow"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: aiohttp",
+    "Framework :: AsyncIO",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Security",
+    "Typing :: Typed",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/coreycothrum/fastapi_auth0_code_flow"
+"Bug Tracker" = "https://github.com/coreycothrum/fastapi_auth0_code_flow/issues"
