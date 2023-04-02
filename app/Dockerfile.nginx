@@ -1,0 +1,3 @@
+FROM coreycothrum/nginx:v0.1.0
+
+ADD https://raw.github.com/coreycothrum/fastapi_template/main/nginx/default.locations.template /etc/nginx/templates/default.locations.template

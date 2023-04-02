@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  fastapi:
+    build:
+      dockerfile: app/Dockerfile
+      context: .
+    environment:
+      DEVEL_ENVIRONMENT: ${DEVEL_ENVIRONMENT}
+      UVICORN_HOST: ${UVICORN_HOST}
+      UVICORN_PORT: ${UVICORN_PORT}
+      UVICORN_RELOAD: ${UVICORN_RELOAD}
+      AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}
+      AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      AUTH0_ENDPOINT_PREFIX: ${AUTH0_ENDPOINT_PREFIX}
+    volumes:
+    - ./app/app:/fastapi_app/app:ro
+    - ./fastapi_auth0_code_flow:/fastapi_app/fastapi_auth0_code_flow:ro
+    expose:
+    - ${UVICORN_PORT}
+    restart: always
+  certbot:
+    image: coreycothrum/certbot:v0.1.0
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+    restart: always
+    volumes:
+    - CERTBOT_CERTS:/etc/letsencrypt:rw
+    - CERTBOT_WEBROOT:/var/www/certbot:rw
+  nginx:
+    build:
+      context: app
+      dockerfile: Dockerfile.nginx
+    depends_on:
+    - certbot
+    - fastapi
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      PROXY_SERVER: fastapi:${UVICORN_PORT}
+    ports:
+    - 80:80
+    - 443:443
+    restart: always
+    volumes:
+    - CERTBOT_CERTS:/etc/letsencrypt:ro
+    - CERTBOT_WEBROOT:/var/www/certbot:ro
+volumes:
+  CERTBOT_CERTS:
+  CERTBOT_WEBROOT:
